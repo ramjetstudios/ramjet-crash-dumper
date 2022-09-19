@@ -17,7 +17,7 @@ const ReadString = (ptr: number, dump: Buffer): [number, string] => {
   return [read, data];
 };
 
-interface IUnrealDump {
+export interface IUnrealDump {
   dumpID: string;
   dumpFilename: string;
   fileLen: number;

@@ -11,20 +11,25 @@ export default async function Init() {
   await client.login(process.env.DISCORD_BOT_TOKEN);
 }
 
-export const Send = async (id: string, stack: string, kvs: { [key: string]: string }, logfile: string) => {
+export const Send = async (id: string, kvs: { [key: string]: string }, logfile?: string, stack?: string) => {
   const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_ID!);
   if (channel && channel.isTextBased()) {
-    const logPayload = new AttachmentBuilder(Buffer.from(logfile));
-    logPayload.setName('Vein.log');
-    logPayload.setDescription("User's crash logfile");
+    let logPayload: AttachmentBuilder | undefined = undefined;
+    if (logfile) {
+      logPayload = new AttachmentBuilder(Buffer.from(logfile));
+      logPayload.setName('Vein.log');
+      logPayload.setDescription("User's crash logfile");
+    }
 
     const payload = new EmbedBuilder();
 
     payload.setAuthor({ name: `Ramjet Crash Dumper` });
     payload.setColor(0xdc473a);
-    payload.setDescription(`\`\`\`
+    if (stack) {
+      payload.setDescription(`\`\`\`
 ${stack.substring(0, 1023 - 8)}
 \`\`\``);
+    }
     payload.setFields([
       ...Object.keys(kvs).map((k) => ({
         name: k,
@@ -40,7 +45,7 @@ ${stack.substring(0, 1023 - 8)}
 
     const message = new MessagePayload(channel, {
       embeds: [payload],
-      files: [logPayload],
+      files: logPayload ? [logPayload] : [],
     });
     await channel.send(message);
   } else {
