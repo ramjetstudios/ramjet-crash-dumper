@@ -2,6 +2,12 @@
 
 Throws stacktraces from crashes from Unreal Engine's reporter into a Discord channel.
 
+# Setup
+
+Fill out the env vars below. The package uses `dotenv` so during testing you can put these in a `.env` file.
+
+Update `DataRouterUrl` in `UnrealEngine/Engine/Programs/CrashReportClient/Config/DefaultEngine.ini` to point to wherever this is hosted.
+
 # Env vars
 
 ## `PORT=8080`
