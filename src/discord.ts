@@ -36,10 +36,6 @@ ${stack.substring(0, 1023 - 8)}
         value: kvs[k],
         inline: true,
       })),
-      {
-        name: 'Logfile',
-        value: 'attachment://Vein.log',
-      },
     ]);
     payload.setTitle(id);
 
