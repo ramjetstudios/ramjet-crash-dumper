@@ -11,6 +11,15 @@ export default async function Init() {
   await client.login(process.env.DISCORD_BOT_TOKEN);
 }
 
+export const SendText = async (text: string) => {
+  const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_ID!);
+  if (channel && channel.isTextBased()) {
+    await channel.send(text);
+  } else {
+    console.error(chalk.red(`Failed to find channel ${process.env.DISCORD_CHANNEL_ID!}!`));
+  }
+};
+
 export const Send = async (id: string, kvs: { [key: string]: string }, logfile?: string, stack?: string) => {
   const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_ID!);
   if (channel && channel.isTextBased()) {

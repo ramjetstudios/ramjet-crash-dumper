@@ -4,7 +4,7 @@ import Cors from '@koa/cors';
 import Router from '@koa/router';
 import rawBody from 'raw-body';
 import * as zlib from 'zlib';
-import DiscordInit, { Send as SendToDiscord } from './discord';
+import DiscordInit, { Send as SendToDiscord, SendText } from './discord';
 import ReadUnrealDump, { IUnrealDump } from './unreal';
 import * as xml2js from 'xml2js';
 
@@ -65,6 +65,20 @@ R.post('/', async (ctx) => {
       console.error(chalk.red(err));
       ctx.status = 400;
       ctx.body = { error: 'bad_crash_context' };
+      return;
+    }
+  }
+
+  const filters = (process.env.CRASH_FILTERS || '').split(',').map((v) => v.trim());
+  for (const filter of filters) {
+    if (filter && stack.includes(filter)) {
+      try {
+        await SendText(`\`${filter} crash - ignoring.\``);
+        ctx.status = 201;
+      } catch (err) {
+        console.error(chalk.red(err));
+        ctx.status = 500;
+      }
       return;
     }
   }
