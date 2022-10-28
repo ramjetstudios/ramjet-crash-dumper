@@ -7,6 +7,30 @@ client.on('ready', () => {
   console.log(chalk.gray(`Discord bot ${chalk.magenta(client.user?.tag)} ready.`));
 });
 
+client.on('messageCreate', async (message) => {
+  if (message.channelId === '1035346874892308540') {
+    if (message.content.trim().toLowerCase() !== 'vein') {
+      try {
+        await message.delete();
+      } catch (err) {}
+    } else {
+      try {
+        await message.pin();
+      } catch (err) {}
+    }
+  }
+});
+
+client.on('messageUpdate', async (message) => {
+  if (message.channelId === '1035346874892308540') {
+    if ((message.content || '').trim().toLowerCase() !== 'vein') {
+      try {
+        await message.delete();
+      } catch (err) {}
+    }
+  }
+});
+
 export default async function Init() {
   await client.login(process.env.DISCORD_BOT_TOKEN);
 }
