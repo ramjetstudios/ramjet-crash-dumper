@@ -16,11 +16,15 @@ client.on('messageCreate', async (message) => {
 
       try {
         await message.delete();
-      } catch (err) {}
+      } catch (err) {
+        console.error(chalk.red(err));
+      }
     } else {
       try {
         await message.pin();
-      } catch (err) {}
+      } catch (err) {
+        console.error(chalk.red(err));
+      }
     }
   }
 });
@@ -30,7 +34,9 @@ client.on('messageUpdate', async (message) => {
     if ((message.content || '').trim().toLowerCase() !== 'vein') {
       try {
         await message.delete();
-      } catch (err) {}
+      } catch (err) {
+        console.error(chalk.red(err));
+      }
     }
   }
 });
