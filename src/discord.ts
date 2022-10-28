@@ -26,6 +26,10 @@ client.on(Events.MessageCreate, async (message) => {
     } catch (err) {}
   }
 
+  if (message.author?.bot) {
+    return;
+  }
+
   if (message.channelId === '1035346874892308540') {
     if (message.content.trim().toLowerCase() !== 'vein') {
       if (!message.deletable) {
@@ -52,6 +56,10 @@ client.on(Events.MessageUpdate, async (message) => {
     try {
       await message.fetch();
     } catch (err) {}
+  }
+
+  if (message.author?.bot) {
+    return;
   }
 
   if (message.channelId === '1035346874892308540') {
