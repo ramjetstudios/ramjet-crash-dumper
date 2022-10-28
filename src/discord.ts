@@ -32,6 +32,10 @@ client.on('messageCreate', async (message) => {
 client.on('messageUpdate', async (message) => {
   if (message.channelId === '1035346874892308540') {
     if ((message.content || '').trim().toLowerCase() !== 'vein') {
+      if (!message.deletable) {
+        console.error(chalk.red(`Message doesn't have 'vein', but it is not deletable`));
+      }
+
       try {
         await message.delete();
       } catch (err) {
