@@ -1,13 +1,31 @@
 import chalk from 'chalk';
-import { Client, GatewayIntentBits, EmbedBuilder, MessagePayload, AttachmentBuilder, Attachment } from 'discord.js';
+import {
+  Client,
+  GatewayIntentBits,
+  EmbedBuilder,
+  MessagePayload,
+  AttachmentBuilder,
+  Attachment,
+  Partials,
+  Events,
+} from 'discord.js';
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
+  partials: [Partials.Message, Partials.Channel],
+});
 
 client.on('ready', () => {
   console.log(chalk.gray(`Discord bot ${chalk.magenta(client.user?.tag)} ready.`));
 });
 
-client.on('messageCreate', async (message) => {
+client.on(Events.MessageCreate, async (message) => {
+  if (message.partial) {
+    try {
+      await message.fetch();
+    } catch (err) {}
+  }
+
   if (message.channelId === '1035346874892308540') {
     if (message.content.trim().toLowerCase() !== 'vein') {
       if (!message.deletable) {
@@ -29,7 +47,13 @@ client.on('messageCreate', async (message) => {
   }
 });
 
-client.on('messageUpdate', async (message) => {
+client.on(Events.MessageUpdate, async (message) => {
+  if (message.partial) {
+    try {
+      await message.fetch();
+    } catch (err) {}
+  }
+
   if (message.channelId === '1035346874892308540') {
     if ((message.content || '').trim().toLowerCase() !== 'vein') {
       if (!message.deletable) {
