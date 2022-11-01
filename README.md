@@ -21,7 +21,3 @@ Your Discord bot's token, from the Discord developer portal.
 ## `DISCORD_CHANNEL_ID=1021137012004225044`
 
 The Discord channel for your bot to post dumps to.
-
-## `CRASH_FILTERS=a,b,c,...`
-
-Comma-separated list of filters. If a stack passes this filter, the dump is ignored and a smaller message is sent. Useful for engine crashes that you can't fix.

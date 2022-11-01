@@ -101,20 +101,6 @@ R.post('/', async (ctx) => {
     return;
   }
 
-  const filters = (process.env.CRASH_FILTERS || '').split(',').map((v) => v.trim());
-  for (const filter of filters) {
-    if (filter && stack.includes(filter)) {
-      try {
-        await SendText(`\`${filter} crash - ignoring.\``);
-        ctx.status = 201;
-      } catch (err) {
-        console.error(chalk.red(err));
-        ctx.status = 500;
-      }
-      return;
-    }
-  }
-
   try {
     await SendToDiscord(data.dumpID, propertiesForDiscord, data.files['Vein.log'], stack);
   } catch (err) {
