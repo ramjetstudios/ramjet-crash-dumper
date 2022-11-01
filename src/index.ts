@@ -7,6 +7,8 @@ import * as zlib from 'zlib';
 import DiscordInit, { Send as SendToDiscord, SendText } from './discord';
 import ReadUnrealDump, { IUnrealDump } from './unreal';
 import * as xml2js from 'xml2js';
+import Database from './db';
+import * as crypto from 'crypto';
 
 const App = new Koa();
 App.use(Cors());
@@ -67,6 +69,29 @@ R.post('/', async (ctx) => {
       ctx.body = { error: 'bad_crash_context' };
       return;
     }
+  }
+
+  const stackCropped = stack.substring(0, 1023);
+  try {
+    await Database.transaction(async (db) => {
+      const existing = await db('crashes').select('*').where('stack', stackCropped).first();
+      if (existing) {
+        await db('crashes')
+          .update({
+            count: existing.count + 1,
+            last_seen: new Date(),
+          })
+          .where('id', existing.id);
+      } else {
+        const id = crypto.randomUUID();
+        await db('crashes').insert({
+          id,
+          stack: stackCropped,
+        });
+      }
+    });
+  } catch (err) {
+    console.error(chalk.red(err));
   }
 
   const filters = (process.env.CRASH_FILTERS || '').split(',').map((v) => v.trim());
