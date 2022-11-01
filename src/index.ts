@@ -72,10 +72,12 @@ R.post('/', async (ctx) => {
   }
 
   const stackCropped = stack.substring(0, 1023);
+  let bFound = false;
   try {
     await Database.transaction(async (db) => {
       const existing = await db('crashes').select('*').where('stack', stackCropped).first();
       if (existing) {
+        bFound = true;
         await db('crashes')
           .update({
             count: existing.count + 1,
@@ -92,6 +94,11 @@ R.post('/', async (ctx) => {
     });
   } catch (err) {
     console.error(chalk.red(err));
+  }
+
+  if (bFound) {
+    ctx.status = 204;
+    return;
   }
 
   const filters = (process.env.CRASH_FILTERS || '').split(',').map((v) => v.trim());
