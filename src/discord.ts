@@ -88,6 +88,9 @@ client.on('interactionCreate', async (interaction) => {
   if (interaction.commandName === 'crashcount') {
     const count = await Database('crashes').sum({ c: 'count' });
     await interaction.reply(`${count[0].c} crashes in the database. Zero soon (TM)`);
+  } else if (interaction.commandName === 'members') {
+    const guild = await client.guilds.resolve(process.env.DISCORD_SERVER_ID);
+    await interaction.reply(`${guild.memberCount} members.`);
   }
 });
 
@@ -98,6 +101,10 @@ export default async function Init() {
       {
         name: 'crashcount',
         description: 'Tells you the number of crashes reported in the last 24 hours.',
+      },
+      {
+        name: 'members',
+        description: 'Tells you the number of members in this server.',
       },
     ],
   });
