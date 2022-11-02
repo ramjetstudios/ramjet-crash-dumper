@@ -102,7 +102,7 @@ export const Send = async (id: string, kvs: { [key: string]: string }, logfile?:
 
     const payload = new EmbedBuilder();
 
-    payload.setAuthor({ name: `Ramjet Crash Dumper` });
+    payload.setAuthor({ name: `Ramjet Bot` });
     payload.setColor(0xdc473a);
     if (stack) {
       payload.setDescription(`\`\`\`
