@@ -139,10 +139,15 @@ CrashRouter.post('/', async (ctx) => {
 
   const stackCropped = stack.substring(0, 1023);
   let bFound = false;
+  let dbID = '';
   try {
     await Database.transaction(async (db) => {
-      const existing = await db('crashes').select('*').where('stack', stackCropped).first();
+      const existing = await db<{ id: string; count: number }>('crashes')
+        .select('id', 'count')
+        .where('stack', stackCropped)
+        .first();
       if (existing) {
+        dbID = existing.id;
         bFound = true;
         await db('crashes')
           .update({
@@ -151,9 +156,9 @@ CrashRouter.post('/', async (ctx) => {
           })
           .where('id', existing.id);
       } else {
-        const id = crypto.randomUUID();
+        dbID = crypto.randomUUID();
         await db('crashes').insert({
-          id,
+          id: dbID,
           stack: stackCropped,
         });
       }
@@ -167,12 +172,21 @@ CrashRouter.post('/', async (ctx) => {
     return;
   }
 
+  let messageId: string;
   try {
-    await SendToDiscord(data.dumpID, propertiesForDiscord, data.files['Vein.log'], stack);
+    messageId = await SendToDiscord(data.dumpID, propertiesForDiscord, data.files['Vein.log'], stack);
   } catch (err) {
     console.error(chalk.red(err));
     ctx.status = 500;
     return;
+  }
+
+  if (messageId && dbID) {
+    await Database('crashes')
+      .update({
+        discord_id: messageId,
+      })
+      .where('id', dbID);
   }
 
   ctx.status = 201;

@@ -119,7 +119,12 @@ export const SendText = async (text: string) => {
   }
 };
 
-export const Send = async (id: string, kvs: { [key: string]: string }, logfile?: string, stack?: string) => {
+export const Send = async (
+  id: string,
+  kvs: { [key: string]: string },
+  logfile?: string,
+  stack?: string
+): Promise<string | undefined> => {
   const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_ID!);
   if (channel && channel.isTextBased()) {
     let logPayload: AttachmentBuilder | undefined = undefined;
@@ -151,7 +156,8 @@ ${stack.substring(0, 1023 - 8)}
       embeds: [payload],
       files: logPayload ? [logPayload] : [],
     });
-    await channel.send(message);
+    const resp = await channel.send(message);
+    return resp.id;
   } else {
     console.error(chalk.red(`Failed to find channel ${process.env.DISCORD_CHANNEL_ID!}!`));
   }
