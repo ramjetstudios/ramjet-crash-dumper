@@ -8,12 +8,17 @@ import {
   Attachment,
   Partials,
   Events,
+  REST,
+  Routes,
 } from 'discord.js';
+import Database from './db';
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
   partials: [Partials.Message, Partials.Channel],
 });
+
+const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
 
 client.on('ready', () => {
   console.log(chalk.gray(`Discord bot ${chalk.magenta(client.user?.tag)} ready.`));
@@ -77,8 +82,25 @@ client.on(Events.MessageUpdate, async (message) => {
   }
 });
 
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+
+  if (interaction.commandName === 'crashcount') {
+    const count = await Database('crashes').sum({ c: 'count' });
+    await interaction.reply(`${count[0].c} crashes in the database. Zero soon (TM)`);
+  }
+});
+
 export default async function Init() {
   await client.login(process.env.DISCORD_BOT_TOKEN);
+  await rest.put(Routes.applicationCommands('1021136368321188010'), {
+    body: [
+      {
+        name: 'crashcount',
+        description: 'Tells you the number of crashes reported in the last 24 hours.',
+      },
+    ],
+  });
 }
 
 export const SendText = async (text: string) => {
