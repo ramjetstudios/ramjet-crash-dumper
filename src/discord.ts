@@ -87,7 +87,10 @@ client.on('interactionCreate', async (interaction) => {
 
   if (interaction.commandName === 'crashcount') {
     const count = await Database('crashes').sum({ c: 'count' });
-    await interaction.reply(`${count[0].c} crashes in the database. Zero soon (TM)`);
+    const uniques = await Database('crashes').count({ c: '*' });
+    await interaction.reply(
+      `${count[0].c} crashes in the database, with ${uniques[0].c} unique crash types. Zero soon(TM)`
+    );
   } else if (interaction.commandName === 'members') {
     const guild = await client.guilds.resolve(process.env.DISCORD_SERVER_ID);
     await interaction.reply(`${guild.memberCount} members.`);
