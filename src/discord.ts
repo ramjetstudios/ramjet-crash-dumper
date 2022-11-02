@@ -93,7 +93,7 @@ client.on('interactionCreate', async (interaction) => {
 
 export default async function Init() {
   await client.login(process.env.DISCORD_BOT_TOKEN);
-  await rest.put(Routes.applicationCommands('1021136368321188010'), {
+  await rest.put(Routes.applicationCommands(process.env.DISCORD_APPLICATION_ID), {
     body: [
       {
         name: 'crashcount',
