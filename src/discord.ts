@@ -93,7 +93,7 @@ client.on('interactionCreate', async (interaction) => {
     await interaction.reply(`${guild.memberCount} members.`);
   } else if (interaction.commandName === 'vein') {
     const guild = await client.guilds.resolve(process.env.DISCORD_SERVER_ID);
-    const emoji = await guild.emojis.resolve('1037418403717193748');
+    const emoji = await guild.emojis.fetch('973113603446153226');
     await interaction.reply(`${emoji}`);
   }
 });
