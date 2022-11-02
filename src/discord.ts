@@ -89,8 +89,12 @@ client.on('interactionCreate', async (interaction) => {
     const count = await Database('crashes').sum({ c: 'count' });
     await interaction.reply(`${count[0].c} crashes in the database. Zero soon (TM)`);
   } else if (interaction.commandName === 'members') {
-    const guild = await client.guilds.resolve(process.env.DISCORD_SERVER_ID);
+    const guild = await client.guilds.fetch(process.env.DISCORD_SERVER_ID);
     await interaction.reply(`${guild.memberCount} members.`);
+  } else if (interaction.commandName === 'vein') {
+    const guild = await client.guilds.fetch(process.env.DISCORD_SERVER_ID);
+    const emoji = await guild.emojis.fetch('1037418403717193748');
+    await interaction.reply(`${emoji}`);
   }
 });
 
@@ -105,6 +109,10 @@ export default async function Init() {
       {
         name: 'members',
         description: 'Tells you the number of members in this server.',
+      },
+      {
+        name: 'vein',
+        description: 'VEIN',
       },
     ],
   });
