@@ -5,6 +5,7 @@ import Router from '@koa/router';
 import DiscordInit from './discord';
 import FeedbackRouter from './feedback';
 import { CrashRouter } from './crashes';
+import { GetWishlists } from './steam';
 
 const App = new Koa();
 App.use(Cors());
