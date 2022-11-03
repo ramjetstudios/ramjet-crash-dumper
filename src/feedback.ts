@@ -38,7 +38,7 @@ R.post('/', bodyParser(), async (ctx) => {
     const id = crypto.randomUUID();
     const f = await t('feedback').insert({
       id,
-      user_name: body.name,
+      user_name: filter.clean(body.name),
       author: steamID,
       description: filter.clean(body.body),
     });
