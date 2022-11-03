@@ -115,6 +115,8 @@ interface IFeedbackResponse {
   my_vote: -1 | 0 | 1;
   upvotes: number;
   downvotes: number;
+  developer_response_type: string;
+  developer_response: string;
 }
 
 R.get('/', async (ctx) => {
@@ -124,6 +126,8 @@ R.get('/', async (ctx) => {
     id: 'feedback.id',
     created_at: 'feedback.created_at',
     description: 'description',
+    developer_response_type: 'developer_response_type',
+    developer_response: 'developer_response',
   });
 
   const ret: IFeedbackResponse[] = [];
@@ -147,6 +151,8 @@ R.get('/', async (ctx) => {
     ret.push({
       ...f,
       my_vote: myVoteVal,
+      developer_response_type: f.developer_response_type || '',
+      developer_response: f.developer_response || '',
       upvotes: parseInt(upvotes[0].c, 10),
       downvotes: parseInt(downvotes[0].c, 10),
     });
