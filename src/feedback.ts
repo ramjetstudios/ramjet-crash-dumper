@@ -4,6 +4,7 @@ import Joi from 'joi';
 import Database from './db';
 import chalk from 'chalk';
 import * as crypto from 'crypto';
+import * as filter from 'leo-profanity';
 
 const R = new Router();
 
@@ -14,7 +15,7 @@ interface IFeedback {
 
 const JFeedback = Joi.object<IFeedback>({
   name: Joi.string().optional().allow('').default('').max(200),
-  body: Joi.string().required().max(8192),
+  body: Joi.string().required().max(8192).trim(),
 });
 
 R.post('/', bodyParser(), async (ctx) => {
@@ -39,7 +40,7 @@ R.post('/', bodyParser(), async (ctx) => {
       id,
       user_name: body.name,
       author: steamID,
-      description: body.body,
+      description: filter.clean(body.body),
     });
 
     const vid = crypto.randomUUID();

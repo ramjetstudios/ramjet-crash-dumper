@@ -263,6 +263,11 @@
   dependencies:
     "@types/koa" "*"
 
+"@types/leo-profanity@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@types/leo-profanity/-/leo-profanity-1.5.0.tgz#f7264c268af130f181e46a10b463df41614625ab"
+  integrity sha512-/DRIgKYR7j41m+RzVjmMSVwlcsugpjmpe31NDDDI/K7qqz4T6h5tXxPJ3u1Du04XgfHYVLdpf4N4GCBxWl6+6A==
+
 "@types/mime@*":
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-3.0.1.tgz#5f8f2bca0a5863cb69bc0b0acd88c96cb1d4ae10"
@@ -718,6 +723,11 @@ form-data@^3.0.0:
     combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
+french-badwords-list@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/french-badwords-list/-/french-badwords-list-1.0.6.tgz#19b99ed84977994ca15693183c882d6019cfdad7"
+  integrity sha512-a0H47H8OkyT/8xoYABxKbzOTgETsnjecYP/9bAI8mnI3sTlUm9MO5Wm8Spsj5gQSp4Uqpu0UqGhaJqtuUnTNyQ==
+
 fresh@~0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
@@ -995,6 +1005,14 @@ koa@^2.13.4:
     statuses "^1.5.0"
     type-is "^1.6.16"
     vary "^1.1.2"
+
+leo-profanity@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/leo-profanity/-/leo-profanity-1.6.1.tgz#0497aa5c6e4b1ccb11ee5377c011c326cade0bcc"
+  integrity sha512-3qD74EI62jSjk76pSiBgHZF4wDwzDeJAfCc8Yp/JAdrDvdMwZXZ0lRewKLQbePg0NJpqiNMPuoZ0JFnD4KROJg==
+  optionalDependencies:
+    french-badwords-list "^1.0.6"
+    russian-bad-words "^0.5.0"
 
 lodash.snakecase@^4.1.1:
   version "4.1.1"
@@ -1296,6 +1314,11 @@ rimraf@^2.6.1:
   integrity sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==
   dependencies:
     glob "^7.1.3"
+
+russian-bad-words@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/russian-bad-words/-/russian-bad-words-0.5.0.tgz#d4abcdc55f7af37606cdbac44bcb9e0bde6c3855"
+  integrity sha512-euNvEYki6iYYpkNbeudW+lEMMYGEmN7EBwVF8ezlbv0bZoQpVYB7W10cCeUIGV7Ed50sJynLQ0c559q5iI0ejQ==
 
 safe-buffer@5.2.1, safe-buffer@~5.2.0:
   version "5.2.1"
