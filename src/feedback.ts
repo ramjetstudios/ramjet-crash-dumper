@@ -3,14 +3,17 @@ import bodyParser from 'koa-bodyparser';
 import Joi from 'joi';
 import Database from './db';
 import chalk from 'chalk';
+import * as crypto from 'crypto';
 
 const R = new Router();
 
 interface IFeedback {
+  name: string;
   body: string;
 }
 
 const JFeedback = Joi.object<IFeedback>({
+  name: Joi.string().optional().allow('').default('').max(200),
   body: Joi.string().required().max(8192),
 });
 
@@ -34,6 +37,7 @@ R.post('/', bodyParser(), async (ctx) => {
     const id = crypto.randomUUID();
     const f = await t('feedback').insert({
       id,
+      name: body.name,
       author: steamID,
       description: body.body,
     });
@@ -81,7 +85,7 @@ R.post('/:id/vote', bodyParser(), async (ctx) => {
   }
 
   const existing = await Database('feedback_votes')
-    .select('*')
+    .select('id')
     .where({ author: steamID, feedback_id: ctx.params.id })
     .first();
 
