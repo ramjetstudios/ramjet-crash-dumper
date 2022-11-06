@@ -184,7 +184,7 @@ CrashRouter.post('/', async (ctx) => {
   if (messageId && dbID) {
     await Database('crashes')
       .update({
-        discord_id: messageId,
+        discord_message_id: messageId,
       })
       .where('id', dbID);
   }
