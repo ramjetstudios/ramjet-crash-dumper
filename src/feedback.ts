@@ -109,20 +109,6 @@ R.post('/:id/vote', bodyParser(), async (ctx) => {
   ctx.status = 204;
 });
 
-R.get('/known-bugs', async (ctx) => {
-  ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate');
-  ctx.set('Pragma', 'no-cache');
-  ctx.set('Expires', '0');
-
-  const row = await Database<{ text: string }>('known_bugs').select({ text: 'text' }).first();
-  if (!row) {
-    ctx.body = 'Todo.';
-    return;
-  }
-
-  return row.text;
-});
-
 interface IFeedbackResponse {
   id: string;
   created_at: string;
@@ -179,6 +165,20 @@ R.get('/', async (ctx) => {
 
   ctx.status = 200;
   ctx.body = ret;
+});
+
+R.get('/known-bugs', async (ctx) => {
+  ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+  ctx.set('Pragma', 'no-cache');
+  ctx.set('Expires', '0');
+
+  const row = await Database<{ text: string }>('known_bugs').select({ text: 'text' }).first();
+  if (!row) {
+    ctx.body = 'Todo.';
+    return;
+  }
+
+  return row.text;
 });
 
 export default R;
