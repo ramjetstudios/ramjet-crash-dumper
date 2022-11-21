@@ -110,6 +110,10 @@ R.post('/:id/vote', bodyParser(), async (ctx) => {
 });
 
 R.get('/known-bugs', async (ctx) => {
+  ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+  ctx.set('Pragma', 'no-cache');
+  ctx.set('Expires', '0');
+
   const row = await Database<{ text: string }>('known_bugs').select({ text: 'text' }).first();
   if (!row) {
     ctx.body = 'Todo.';
@@ -131,6 +135,10 @@ interface IFeedbackResponse {
 }
 
 R.get('/', async (ctx) => {
+  ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+  ctx.set('Pragma', 'no-cache');
+  ctx.set('Expires', '0');
+
   const steamID = ctx.request.headers.authorization;
 
   const allFeedback = await Database('feedback').select({
