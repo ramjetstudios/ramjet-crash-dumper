@@ -109,6 +109,10 @@ R.post('/:id/vote', bodyParser(), async (ctx) => {
   ctx.status = 204;
 });
 
+R.get('/known-bugs', async (ctx) => {
+  return 'Todo.';
+});
+
 interface IFeedbackResponse {
   id: string;
   created_at: string;
