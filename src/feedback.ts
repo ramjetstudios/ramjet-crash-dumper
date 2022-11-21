@@ -110,7 +110,7 @@ R.post('/:id/vote', bodyParser(), async (ctx) => {
 });
 
 R.get('/known-bugs', async (ctx) => {
-  return 'Todo.';
+  ctx.body = 'Todo.';
 });
 
 interface IFeedbackResponse {
