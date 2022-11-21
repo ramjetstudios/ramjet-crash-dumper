@@ -110,7 +110,13 @@ R.post('/:id/vote', bodyParser(), async (ctx) => {
 });
 
 R.get('/known-bugs', async (ctx) => {
-  ctx.body = 'Todo.';
+  const row = await Database<{ text: string }>('known_bugs').select({ text: 'text' }).first();
+  if (!row) {
+    ctx.body = 'Todo.';
+    return;
+  }
+
+  return row.text;
 });
 
 interface IFeedbackResponse {
