@@ -98,6 +98,14 @@ client.on('interactionCreate', async (interaction) => {
     const guild = await client.guilds.resolve(process.env.DISCORD_SERVER_ID);
     const emoji = await guild.emojis.fetch('973113603446153226');
     await interaction.reply(`${emoji}`);
+  } else if (interaction.commandName === 'knownbugs') {
+    const row = await Database<{ text: string }>('known_bugs').select({ text: 'text' }).first();
+    if (!row) {
+      await interaction.reply('Todo.');
+      return;
+    }
+
+    await interaction.reply(row.text);
   }
 });
 
@@ -116,6 +124,10 @@ export default async function Init() {
       {
         name: 'vein',
         description: 'VEIN',
+      },
+      {
+        name: 'knownbugs',
+        description: "Tells you some bugs we're currently aware of.",
       },
     ],
   });
