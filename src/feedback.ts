@@ -11,11 +11,13 @@ const R = new Router();
 interface IFeedback {
   name: string;
   body: string;
+  game_version: string;
 }
 
 const JFeedback = Joi.object<IFeedback>({
   name: Joi.string().optional().allow('').default('').max(200),
   body: Joi.string().required().max(8192).trim(),
+  game_version: Joi.string().optional().allow('').default('').max(32),
 });
 
 R.post('/', bodyParser(), async (ctx) => {
@@ -41,6 +43,7 @@ R.post('/', bodyParser(), async (ctx) => {
       user_name: filter.clean(body.name),
       author: steamID,
       description: filter.clean(body.body),
+      game_version: filter.clean(body.game_version),
     });
 
     const vid = crypto.randomUUID();
@@ -141,13 +144,22 @@ R.get('/', async (ctx) => {
 
   const steamID = ctx.request.headers.authorization;
 
-  const allFeedback = await Database('feedback').select({
+  const gameVersion = ctx.request.headers['x-gameversion'] || 'unknown';
+
+  let allFeedbackPromise = Database('feedback').select({
     id: 'feedback.id',
     created_at: 'feedback.created_at',
     description: 'description',
     developer_response_type: 'developer_response_type',
     developer_response: 'developer_response',
+    game_version: 'game_version',
   });
+
+  if (gameVersion !== 'unknown') {
+    allFeedbackPromise = allFeedbackPromise.where('game_version', gameVersion);
+  }
+
+  const allFeedback = await allFeedbackPromise;
 
   const ret: IFeedbackResponse[] = [];
 
