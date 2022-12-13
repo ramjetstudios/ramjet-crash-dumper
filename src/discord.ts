@@ -56,27 +56,25 @@ client.on(Events.MessageCreate, async (message) => {
   }
 });
 
-client.on(Events.MessageUpdate, async (message) => {
-  if (message.partial) {
+client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
+  if (newMessage.partial) {
     try {
-      await message.fetch();
+      await newMessage.fetch();
     } catch (err) {}
   }
 
-  if (message.author?.bot) {
+  if (newMessage.author?.bot) {
     return;
   }
 
-  console.log(message);
-
-  if (message.channelId === '1035346874892308540') {
-    if ((message.content || '').trim().toLowerCase() !== 'vein') {
-      if (!message.deletable) {
+  if (newMessage.channelId === '1035346874892308540') {
+    if ((newMessage.content || '').trim().toLowerCase() !== 'vein') {
+      if (!newMessage.deletable) {
         console.error(chalk.red(`Message doesn't have 'vein', but it is not deletable`));
       }
 
       try {
-        await message.delete();
+        await newMessage.delete();
       } catch (err) {
         console.error(chalk.red(err));
       }
