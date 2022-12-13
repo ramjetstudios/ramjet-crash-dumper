@@ -67,6 +67,8 @@ client.on(Events.MessageUpdate, async (message) => {
     return;
   }
 
+  console.log(message);
+
   if (message.channelId === '1035346874892308540') {
     if ((message.content || '').trim().toLowerCase() !== 'vein') {
       if (!message.deletable) {
