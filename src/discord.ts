@@ -24,6 +24,8 @@ client.on('ready', () => {
   console.log(chalk.gray(`Discord bot ${chalk.magenta(client.user?.tag)} ready.`));
 });
 
+const VEIN_BLACKLIST = ['1009527676844912741'];
+
 client.on(Events.MessageCreate, async (message) => {
   if (message.partial) {
     try {
@@ -36,7 +38,7 @@ client.on(Events.MessageCreate, async (message) => {
   }
 
   if (message.channelId === '1035346874892308540') {
-    if (message.content.trim().toLowerCase() !== 'vein') {
+    if (message.content.trim().toLowerCase() !== 'vein' || VEIN_BLACKLIST.includes(message.author.id)) {
       if (!message.deletable) {
         console.error(chalk.red(`Message doesn't have 'vein', but it is not deletable`));
       }
@@ -68,7 +70,7 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
   }
 
   if (newMessage.channelId === '1035346874892308540') {
-    if ((newMessage.content || '').trim().toLowerCase() !== 'vein') {
+    if ((newMessage.content || '').trim().toLowerCase() !== 'vein' || VEIN_BLACKLIST.includes(newMessage.author.id)) {
       if (!newMessage.deletable) {
         console.error(chalk.red(`Message doesn't have 'vein', but it is not deletable`));
       }
